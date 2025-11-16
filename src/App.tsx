@@ -18,6 +18,7 @@ function App() {
   }>({});
   const letterRefs = useRef<{ [key: number]: HTMLDivElement | null }>({});
   const svgRef = useRef<SVGSVGElement | null>(null);
+  const inputRef = useRef<HTMLInputElement | null>(null);
   const [lineColor, setLineColor] = useState('#c9a3ff');
   const [buttonColor, setButtonColor] = useState('#81c784');
 
@@ -103,6 +104,14 @@ function App() {
     const timeoutId = setTimeout(updateLetterPositions, 0);
     return () => clearTimeout(timeoutId);
   }, [letters, clickedOrder]);
+
+  const handleClearWord = () => {
+    setBuiltWord([]);
+    setClickedOrder([]);
+    setUsedLetterIds(new Set());
+    // Focus the input
+    inputRef.current?.focus();
+  };
 
   const handleLetterClick = (id: number, letter: string) => {
     // If letter is already used, rewind to that point
@@ -198,19 +207,34 @@ function App() {
   return (
     <div className={styles.container}>
       <div className={styles.inputSection}>
-        <input
-          type="text"
-          value={input}
-          onChange={(e) => {
-            // Only allow letters a-z, convert to lowercase
-            const filtered = e.target.value
-              .toLowerCase()
-              .replace(/[^a-z]/g, '');
-            setInput(filtered);
-          }}
-          placeholder="Letters to anagram..."
-          className={styles.input}
-        />
+        <div className={styles.inputWrapper}>
+          <input
+            ref={inputRef}
+            type="text"
+            value={input}
+            onChange={(e) => {
+              // Only allow letters a-z, convert to lowercase
+              const filtered = e.target.value
+                .toLowerCase()
+                .replace(/[^a-z]/g, '');
+              setInput(filtered);
+            }}
+            placeholder="Letters to anagram..."
+            className={styles.input}
+          />
+          {input.length > 0 && (
+            <button
+              onClick={() => {
+                setInput('');
+                handleClearWord();
+              }}
+              className={styles.clearButton}
+              aria-label="Clear input"
+            >
+              ×
+            </button>
+          )}
+        </div>
         <button
           onClick={handleShuffle}
           disabled={input.length === 0}
