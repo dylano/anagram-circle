@@ -19,15 +19,22 @@ function App() {
   const letterRefs = useRef<{ [key: number]: HTMLDivElement | null }>({});
   const svgRef = useRef<SVGSVGElement | null>(null);
   const [lineColor, setLineColor] = useState('#c9a3ff');
+  const [buttonColor, setButtonColor] = useState('#81c784');
 
   useEffect(() => {
-    // Read CSS variable for line color
+    // Read CSS variables for colors
     const root = document.documentElement;
-    const color = getComputedStyle(root)
+    const lineColorValue = getComputedStyle(root)
       .getPropertyValue('--color-line-stroke')
       .trim();
-    if (color) {
-      setLineColor(color);
+    const buttonColorValue = getComputedStyle(root)
+      .getPropertyValue('--color-button-bg')
+      .trim();
+    if (lineColorValue) {
+      setLineColor(lineColorValue);
+    }
+    if (buttonColorValue) {
+      setButtonColor(buttonColorValue);
     }
   }, []);
 
@@ -168,6 +175,26 @@ function App() {
     };
   };
 
+  const getCircleEdgePoint = (
+    center: { x: number; y: number },
+    target: { x: number; y: number },
+    circleRadius: number = 8
+  ) => {
+    // Calculate direction from center to target
+    const dx = target.x - center.x;
+    const dy = target.y - center.y;
+    const distance = Math.sqrt(dx * dx + dy * dy);
+
+    if (distance === 0) return center;
+
+    // Move circleRadius along the direction vector
+    const scale = circleRadius / distance;
+    return {
+      x: center.x + dx * scale,
+      y: center.y + dy * scale,
+    };
+  };
+
   return (
     <div className={styles.container}>
       <div className={styles.inputSection}>
@@ -200,22 +227,59 @@ function App() {
 
                 if (!startLetterPos || !endLetterPos) return null;
 
-                const startPos = getLineEndpointPosition(startLetterPos);
-                const endPos = getLineEndpointPosition(endLetterPos);
+                const startCenter = getLineEndpointPosition(startLetterPos);
+                const endCenter = getLineEndpointPosition(endLetterPos);
+
+                // Calculate edge points where line connects to circles
+                const startEdge = getCircleEdgePoint(startCenter, endCenter, 8);
+                const endEdge = getCircleEdgePoint(endCenter, startCenter, 8);
 
                 return (
                   <line
                     key={`${currentId}-${nextId}`}
-                    x1={startPos.x}
-                    y1={startPos.y}
-                    x2={endPos.x}
-                    y2={endPos.y}
+                    x1={startEdge.x}
+                    y1={startEdge.y}
+                    x2={endEdge.x}
+                    y2={endEdge.y}
                     stroke={lineColor}
                     strokeWidth="4"
                     className={styles.pathLine}
                   />
                 );
               })}
+            {clickedOrder.map((id, index) => {
+              const letterPos = letterPositions[id];
+              if (!letterPos) return null;
+              const center = getLineEndpointPosition(letterPos);
+              const isFirst = index === 0;
+              const isLast = index === clickedOrder.length - 1;
+
+              const allLettersUsed = clickedOrder.length === letters.length;
+              const fillColor = isFirst
+                ? buttonColor
+                : isLast && allLettersUsed
+                ? '#000000'
+                : 'none';
+
+              return (
+                <circle
+                  key={`marker-${id}`}
+                  cx={center.x}
+                  cy={center.y}
+                  r="8"
+                  fill={fillColor}
+                  stroke={lineColor}
+                  strokeWidth="4"
+                  className={
+                    isFirst
+                      ? styles.startMarker
+                      : isLast
+                      ? styles.endMarker
+                      : styles.pathMarker
+                  }
+                />
+              );
+            })}
           </svg>
           {letters.map((item) => {
             const isUsed = usedLetterIds.has(item.id);

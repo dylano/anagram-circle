@@ -148,6 +148,23 @@
   transition: opacity 0.2s ease;
 }
 
+.startMarker {
+  /* Fill is set inline */
+  transition: opacity 0.2s ease;
+}
+
+.pathMarker {
+  fill: none;
+  stroke: var(--color-line-stroke);
+  transition: opacity 0.2s ease;
+}
+
+.endMarker {
+  /* Fill is set inline to black */
+  stroke: var(--color-line-stroke);
+  transition: opacity 0.2s ease;
+}
+
 .letter {
   position: absolute;
   font-size: 40px;

@@ -37,16 +37,10 @@ function createSVGIcon(size) {
 const publicDir = path.join(__dirname, 'public');
 
 // Create 192x192 SVG
-fs.writeFileSync(
-  path.join(publicDir, 'icon-192.svg'),
-  createSVGIcon(192)
-);
+fs.writeFileSync(path.join(publicDir, 'icon-192.svg'), createSVGIcon(192));
 
 // Create 512x512 SVG
-fs.writeFileSync(
-  path.join(publicDir, 'icon-512.svg'),
-  createSVGIcon(512)
-);
+fs.writeFileSync(path.join(publicDir, 'icon-512.svg'), createSVGIcon(512));
 
 console.log('SVG icons created! Converting to PNG...');
 
@@ -60,13 +54,13 @@ async function generateIcons() {
       .png()
       .toFile(path.join(publicDir, 'icon-192.png'));
     console.log('✓ icon-192.png created');
-    
+
     // Convert 512x512 SVG to PNG
     await sharp(path.join(publicDir, 'icon-512.svg'))
       .png()
       .toFile(path.join(publicDir, 'icon-512.png'));
     console.log('✓ icon-512.png created');
-    
+
     console.log('\n✓ All icons generated successfully!');
   } catch (error) {
     console.error('Error generating icons:', error);
@@ -74,4 +68,3 @@ async function generateIcons() {
 }
 
 generateIcons();
-
