@@ -48,7 +48,8 @@ function App() {
       return;
     }
 
-    const inputLetters = input.split('');
+    // Filter out spaces - only use letters for the circle
+    const inputLetters = input.split('').filter((char) => char !== ' ');
     const shuffled = [...inputLetters].sort(() => Math.random() - 0.5);
 
     const angleStep = 360 / shuffled.length;
@@ -68,7 +69,8 @@ function App() {
   const handleShuffle = () => {
     if (input.length === 0) return;
 
-    const inputLetters = input.split('');
+    // Filter out spaces - only use letters for the circle
+    const inputLetters = input.split('').filter((char) => char !== ' ');
     const shuffled = [...inputLetters].sort(() => Math.random() - 0.5);
     const angleStep = 360 / shuffled.length;
     const positioned = shuffled.map((letter, index) => ({
@@ -221,10 +223,10 @@ function App() {
             type="text"
             value={input}
             onChange={(e) => {
-              // Only allow letters a-z, convert to lowercase
+              // Allow letters a-z and spaces, convert to lowercase
               const filtered = e.target.value
                 .toLowerCase()
-                .replace(/[^a-z]/g, '');
+                .replace(/[^a-z ]/g, '');
               setInput(filtered);
             }}
             placeholder="Letters to anagram..."
