@@ -119,6 +119,14 @@ function App() {
       const clickedIndex = clickedOrder.indexOf(id);
       if (clickedIndex === -1) return;
 
+      // If clicking the first letter, clear everything
+      if (clickedIndex === 0) {
+        setClickedOrder([]);
+        setBuiltWord([]);
+        setUsedLetterIds(new Set());
+        return;
+      }
+
       // Truncate to the clicked letter (inclusive)
       const newOrder = clickedOrder.slice(0, clickedIndex + 1);
       const newWord = builtWord.slice(0, clickedIndex + 1);
