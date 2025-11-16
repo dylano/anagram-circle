@@ -113,8 +113,8 @@
 }
 
 .pathLine {
-  stroke: #000;
-  stroke-width: 3;
+  stroke: #c9a3ff;
+  stroke-width: 4;
   transition: opacity 0.2s ease;
 }
 

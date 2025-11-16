@@ -133,6 +133,29 @@ function App() {
     };
   };
 
+  const getLineEndpointPosition = (
+    letterPos: { x: number; y: number },
+    centerX: number = 200,
+    centerY: number = 200,
+    offsetRadius: number = 30
+  ) => {
+    // Calculate direction vector from center to letter
+    const dx = letterPos.x - centerX;
+    const dy = letterPos.y - centerY;
+    const distance = Math.sqrt(dx * dx + dy * dy);
+
+    if (distance === 0) return letterPos;
+
+    // Normalize and scale back by offsetRadius
+    const newDistance = distance - offsetRadius;
+    const scale = newDistance / distance;
+
+    return {
+      x: centerX + dx * scale,
+      y: centerY + dy * scale,
+    };
+  };
+
   return (
     <div className={styles.container}>
       <div className={styles.inputSection}>
@@ -160,10 +183,13 @@ function App() {
                 const currentId = clickedOrder[index];
                 const nextId = clickedOrder[index + 1];
 
-                const startPos = letterPositions[currentId];
-                const endPos = letterPositions[nextId];
+                const startLetterPos = letterPositions[currentId];
+                const endLetterPos = letterPositions[nextId];
 
-                if (!startPos || !endPos) return null;
+                if (!startLetterPos || !endLetterPos) return null;
+
+                const startPos = getLineEndpointPosition(startLetterPos);
+                const endPos = getLineEndpointPosition(endLetterPos);
 
                 return (
                   <line
@@ -172,8 +198,8 @@ function App() {
                     y1={startPos.y}
                     x2={endPos.x}
                     y2={endPos.y}
-                    stroke="#333"
-                    strokeWidth="2"
+                    stroke="#c9a3ff"
+                    strokeWidth="4"
                     className={styles.pathLine}
                   />
                 );
