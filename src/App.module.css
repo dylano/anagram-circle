@@ -70,6 +70,18 @@
   justify-content: center;
   align-items: center;
   min-height: 500px;
+  margin-bottom: 40px;
+}
+
+.builtWord {
+  font-size: 48px;
+  font-weight: bold;
+  color: #333;
+  letter-spacing: 8px;
+  min-height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .circle {
@@ -88,6 +100,17 @@
   color: #333;
   user-select: none;
   animation: fadeIn 0.5s ease;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.letter:hover:not(.letterUsed) {
+  opacity: 0.7;
+}
+
+.letterUsed {
+  opacity: 0.3;
+  cursor: not-allowed;
 }
 
 @keyframes fadeIn {
@@ -119,5 +142,10 @@
   
   .letter {
     font-size: 24px;
+  }
+  
+  .builtWord {
+    font-size: 36px;
+    letter-spacing: 4px;
   }
 }

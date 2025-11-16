@@ -10,10 +10,14 @@ interface LetterPosition {
 function App() {
   const [input, setInput] = useState('');
   const [letters, setLetters] = useState<LetterPosition[]>([]);
+  const [usedLetterIds, setUsedLetterIds] = useState<Set<number>>(new Set());
+  const [builtWord, setBuiltWord] = useState<string[]>([]);
 
   useEffect(() => {
     if (input.length === 0) {
       setLetters([]);
+      setUsedLetterIds(new Set());
+      setBuiltWord([]);
       return;
     }
 
@@ -28,6 +32,8 @@ function App() {
     }));
 
     setLetters(positioned);
+    setUsedLetterIds(new Set());
+    setBuiltWord([]);
   }, [input]);
 
   const handleShuffle = () => {
@@ -43,6 +49,15 @@ function App() {
     }));
 
     setLetters(positioned);
+    setUsedLetterIds(new Set());
+    setBuiltWord([]);
+  };
+
+  const handleLetterClick = (id: number, letter: string) => {
+    if (usedLetterIds.has(id)) return;
+
+    setUsedLetterIds((prev) => new Set(prev).add(id));
+    setBuiltWord((prev) => [...prev, letter]);
   };
 
   return (
@@ -66,19 +81,31 @@ function App() {
 
       <div className={styles.circleContainer}>
         <div className={styles.circle}>
-          {letters.map((item) => (
-            <div
-              key={item.id}
-              className={styles.letter}
-              style={{
-                transform: `rotate(${item.angle}deg) translate(150px) rotate(-${item.angle}deg)`,
-              }}
-            >
-              {item.letter.toUpperCase()}
-            </div>
-          ))}
+          {letters.map((item) => {
+            const isUsed = usedLetterIds.has(item.id);
+            return (
+              <div
+                key={item.id}
+                className={`${styles.letter} ${
+                  isUsed ? styles.letterUsed : ''
+                }`}
+                style={{
+                  transform: `rotate(${item.angle}deg) translate(150px) rotate(-${item.angle}deg)`,
+                }}
+                onClick={() => handleLetterClick(item.id, item.letter)}
+              >
+                {item.letter.toUpperCase()}
+              </div>
+            );
+          })}
         </div>
       </div>
+
+      {builtWord.length > 0 && (
+        <div className={styles.builtWord}>
+          {builtWord.join('').toUpperCase()}
+        </div>
+      )}
     </div>
   );
 }
