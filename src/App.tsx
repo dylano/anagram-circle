@@ -201,7 +201,13 @@ function App() {
         <input
           type="text"
           value={input}
-          onChange={(e) => setInput(e.target.value)}
+          onChange={(e) => {
+            // Only allow letters a-z, convert to lowercase
+            const filtered = e.target.value
+              .toLowerCase()
+              .replace(/[^a-z]/g, '');
+            setInput(filtered);
+          }}
           placeholder="Letters to anagram..."
           className={styles.input}
         />
