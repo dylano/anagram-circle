@@ -19,12 +19,12 @@ function App() {
 
     const inputLetters = input.split('');
     const shuffled = [...inputLetters].sort(() => Math.random() - 0.5);
-    
+
     const angleStep = 360 / shuffled.length;
     const positioned = shuffled.map((letter, index) => ({
       letter,
       angle: index * angleStep,
-      id: index
+      id: index,
     }));
 
     setLetters(positioned);
@@ -32,14 +32,14 @@ function App() {
 
   const handleShuffle = () => {
     if (input.length === 0) return;
-    
+
     const inputLetters = input.split('');
     const shuffled = [...inputLetters].sort(() => Math.random() - 0.5);
     const angleStep = 360 / shuffled.length;
     const positioned = shuffled.map((letter, index) => ({
       letter,
       angle: index * angleStep,
-      id: Math.random()
+      id: Math.random(),
     }));
 
     setLetters(positioned);
@@ -55,12 +55,12 @@ function App() {
           placeholder="Enter letters here..."
           className={styles.input}
         />
-        <button 
-          onClick={handleShuffle} 
+        <button
+          onClick={handleShuffle}
           disabled={input.length === 0}
           className={styles.shuffleButton}
         >
-          Shuffle Again
+          Shuffle
         </button>
       </div>
 
@@ -71,10 +71,10 @@ function App() {
               key={item.id}
               className={styles.letter}
               style={{
-                transform: `rotate(${item.angle}deg) translate(150px) rotate(-${item.angle}deg)`
+                transform: `rotate(${item.angle}deg) translate(150px) rotate(-${item.angle}deg)`,
               }}
             >
-              {item.letter}
+              {item.letter.toUpperCase()}
             </div>
           ))}
         </div>
