@@ -19,9 +19,12 @@
   --letter-opacity-hover: 0.7;
 }
 
+:global(html),
 :global(body) {
   margin: 0;
   padding: 0;
+  height: 100%;
+  width: 100%;
 }
 
 .container {
@@ -210,6 +213,15 @@
   z-index: 2;
   opacity: 0;
   animation: fadeInLetter 0.2s ease 0.1s forwards;
+  padding: 20px;
+  min-width: 60px;
+  min-height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  -webkit-tap-highlight-color: transparent;
+  outline: none;
+  -webkit-touch-callout: none;
 }
 
 @keyframes fadeInLetter {
@@ -260,6 +272,9 @@
 
   .letter {
     font-size: 28px;
+    padding: 16px;
+    min-width: 50px;
+    min-height: 50px;
   }
 
   .builtWord {

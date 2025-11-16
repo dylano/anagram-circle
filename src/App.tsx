@@ -19,25 +19,13 @@ function App() {
   const letterRefs = useRef<{ [key: number]: HTMLDivElement | null }>({});
   const svgRef = useRef<SVGSVGElement | null>(null);
   const inputRef = useRef<HTMLInputElement | null>(null);
-  const [lineColor, setLineColor] = useState('#c9a3ff');
-  const [buttonColor, setButtonColor] = useState('#81c784');
 
-  useEffect(() => {
-    // Read CSS variables for colors
-    const root = document.documentElement;
-    const lineColorValue = getComputedStyle(root)
-      .getPropertyValue('--color-line-stroke')
+  // Helper to get CSS variable value
+  const getCSSVariable = (varName: string): string => {
+    return getComputedStyle(document.documentElement)
+      .getPropertyValue(varName)
       .trim();
-    const buttonColorValue = getComputedStyle(root)
-      .getPropertyValue('--color-button-bg')
-      .trim();
-    if (lineColorValue) {
-      setLineColor(lineColorValue);
-    }
-    if (buttonColorValue) {
-      setButtonColor(buttonColorValue);
-    }
-  }, []);
+  };
 
   useEffect(() => {
     if (input.length === 0) {
@@ -49,7 +37,11 @@ function App() {
     }
 
     // Filter out spaces - only use letters for the circle
-    const inputLetters = input.split('').filter((char) => char !== ' ');
+    // Convert to lowercase for processing
+    const inputLetters = input
+      .toLowerCase()
+      .split('')
+      .filter((char) => char !== ' ');
     const shuffled = [...inputLetters].sort(() => Math.random() - 0.5);
 
     const angleStep = 360 / shuffled.length;
@@ -70,7 +62,11 @@ function App() {
     if (input.length === 0) return;
 
     // Filter out spaces - only use letters for the circle
-    const inputLetters = input.split('').filter((char) => char !== ' ');
+    // Convert to lowercase for processing
+    const inputLetters = input
+      .toLowerCase()
+      .split('')
+      .filter((char) => char !== ' ');
     const shuffled = [...inputLetters].sort(() => Math.random() - 0.5);
     const angleStep = 360 / shuffled.length;
     const positioned = shuffled.map((letter, index) => ({
@@ -223,7 +219,7 @@ function App() {
             type="text"
             value={input}
             onChange={(e) => {
-              // Allow letters a-z and spaces, convert to lowercase
+              // Allow letters a-z and spaces, filter then convert to uppercase
               const filtered = e.target.value
                 .toLowerCase()
                 .replace(/[^a-z ]/g, '');
@@ -281,7 +277,7 @@ function App() {
                     y1={startEdge.y}
                     x2={endEdge.x}
                     y2={endEdge.y}
-                    stroke={lineColor}
+                    stroke={getCSSVariable('--color-line-stroke')}
                     strokeWidth="4"
                     className={styles.pathLine}
                   />
@@ -296,7 +292,7 @@ function App() {
 
               const allLettersUsed = clickedOrder.length === letters.length;
               const fillColor = isFirst
-                ? buttonColor
+                ? getCSSVariable('--color-button-bg')
                 : isLast && allLettersUsed
                 ? '#000000'
                 : 'none';
@@ -308,7 +304,7 @@ function App() {
                   cy={center.y}
                   r="8"
                   fill={fillColor}
-                  stroke={lineColor}
+                  stroke={getCSSVariable('--color-line-stroke')}
                   strokeWidth="4"
                   className={
                     isFirst
