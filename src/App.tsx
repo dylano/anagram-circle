@@ -18,6 +18,18 @@ function App() {
   }>({});
   const letterRefs = useRef<{ [key: number]: HTMLDivElement | null }>({});
   const svgRef = useRef<SVGSVGElement | null>(null);
+  const [lineColor, setLineColor] = useState('#c9a3ff');
+
+  useEffect(() => {
+    // Read CSS variable for line color
+    const root = document.documentElement;
+    const color = getComputedStyle(root)
+      .getPropertyValue('--color-line-stroke')
+      .trim();
+    if (color) {
+      setLineColor(color);
+    }
+  }, []);
 
   useEffect(() => {
     if (input.length === 0) {
@@ -198,7 +210,7 @@ function App() {
                     y1={startPos.y}
                     x2={endPos.x}
                     y2={endPos.y}
-                    stroke="#c9a3ff"
+                    stroke={lineColor}
                     strokeWidth="4"
                     className={styles.pathLine}
                   />
