@@ -34,7 +34,7 @@ function App() {
     const angleStep = 360 / shuffled.length;
     const positioned = shuffled.map((letter, index) => ({
       letter,
-      angle: index * angleStep,
+      angle: index === 0 ? 270 : (index * angleStep - 90 + 360) % 360, // First letter at top (12:00 = 270°)
       id: index,
     }));
 
@@ -53,7 +53,7 @@ function App() {
     const angleStep = 360 / shuffled.length;
     const positioned = shuffled.map((letter, index) => ({
       letter,
-      angle: index * angleStep,
+      angle: index === 0 ? 270 : (index * angleStep - 90 + 360) % 360, // First letter at top (12:00 = 270°)
       id: Math.random(),
     }));
 
