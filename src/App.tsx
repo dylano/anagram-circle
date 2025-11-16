@@ -140,7 +140,7 @@ function App() {
           type="text"
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          placeholder="Enter letters here..."
+          placeholder="Letters to anagram..."
           className={styles.input}
         />
         <button
