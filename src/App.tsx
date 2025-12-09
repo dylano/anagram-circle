@@ -103,6 +103,11 @@ function App() {
     return () => clearTimeout(timeoutId);
   }, [letters, clickedOrder]);
 
+  useEffect(() => {
+    // Focus input on initial load
+    inputRef.current?.focus();
+  }, []);
+
   const handleClearWord = () => {
     setBuiltWord([]);
     setClickedOrder([]);
