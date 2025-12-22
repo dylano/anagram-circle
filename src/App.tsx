@@ -16,6 +16,7 @@ function App() {
   const [letterPositions, setLetterPositions] = useState<{
     [key: number]: { x: number; y: number };
   }>({});
+  const [showClipboard, setShowClipboard] = useState(false);
   const letterRefs = useRef<{ [key: number]: HTMLDivElement | null }>({});
   const svgRef = useRef<SVGSVGElement | null>(null);
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -114,6 +115,34 @@ function App() {
     setUsedLetterIds(new Set());
     // Focus the input
     inputRef.current?.focus();
+  };
+
+  const handleCopyBuiltWord = async () => {
+    const word = builtWord.join('').toUpperCase();
+
+    try {
+      await navigator.clipboard.writeText(word);
+    } catch (err) {
+      // Fallback for older browsers
+      const textArea = document.createElement('textarea');
+      textArea.value = word;
+      textArea.style.position = 'fixed';
+      textArea.style.opacity = '0';
+      document.body.appendChild(textArea);
+      textArea.select();
+      try {
+        document.execCommand('copy');
+      } catch (fallbackErr) {
+        // Ignore errors
+      }
+      document.body.removeChild(textArea);
+    }
+
+    // Show clipboard emoji for 0.5 seconds
+    setShowClipboard(true);
+    setTimeout(() => {
+      setShowClipboard(false);
+    }, 500);
   };
 
   const handleLetterClick = (id: number, letter: string) => {
@@ -346,9 +375,16 @@ function App() {
       </div>
 
       {builtWord.length > 0 && (
-        <div className={styles.builtWord}>
-          {builtWord.join('').toUpperCase()}
-        </div>
+        <>
+          <div
+            className={styles.builtWord}
+            onMouseDown={handleCopyBuiltWord}
+            onTouchStart={handleCopyBuiltWord}
+          >
+            {builtWord.join('').toUpperCase()}
+          </div>
+          {showClipboard && <div className={styles.clipboardEmoji}>📋</div>}
+        </>
       )}
     </div>
   );

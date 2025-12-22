@@ -14,13 +14,17 @@ A tool to help identify word anagrams, inspired by the book [Minute Cryptic](htt
 
    - Click any used letter to rewind back to that point
    - Click the first letter to clear everything and start fresh
-   - Use the × button in the input field to clear the current word
+   - Use the × button in the input field to clear all letters and start over
 
 4. **Shuffle**: Click the "Shuffle" button to rearrange the letters in a new random order.
+
+5. **Copy Word**: Click or tap the built word displayed at the bottom to copy it to your clipboard. A clipboard emoji will briefly appear to confirm the copy.
 
 ## Features
 
 - **Visual Graph**: See your word-building path as you create it
+- **Built Word Display**: Your current word is shown at the bottom of the screen
+- **Copy to Clipboard**: Click the built word to copy it instantly
 - **Mobile-Friendly**: Responsive design that works on mobile devices
 - **PWA Support**: Install as an app on your Android device's home screen
 
@@ -40,8 +44,8 @@ npm install
 npm run dev
 
 # Build for production
-npm build
+npm run build
 
 # Preview production build
-npm preview
+npm run preview
 ```
